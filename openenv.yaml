@@ -1,0 +1,40 @@
+name: aml-investigator
+description: Simulates an anti-money laundering investigator reviewing transactions.
+version: 1.0.0
+author: Your Name
+api_version: 1.0
+entrypoint: env:AMLEnv
+actions:
+  - type: flag
+    description: Flag a transaction as suspicious.
+    parameters:
+      transaction_id: int
+  - type: request_info
+    description: Request additional information about a transaction.
+    parameters:
+      transaction_id: int
+      query: str
+  - type: escalate
+    description: Escalate the case and end the episode.
+  - type: skip
+    description: Skip the current transaction.
+observations:
+  - current_transaction: object
+  - transactions_processed: list
+  - flags_made: list
+  - info_requested: list
+  - done: bool
+  - task_id: int
+rewards:
+  - range: [-2.0, 1.0]
+  - sparse: false
+tasks:
+  - id: 1
+    name: Easy
+    description: Single suspicious transaction.
+  - id: 2
+    name: Medium
+    description: Structuring - multiple small transactions.
+  - id: 3
+    name: Hard
+    description: Complex mixture with false positives.
